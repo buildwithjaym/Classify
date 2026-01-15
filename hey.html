@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Draggable Chatbot</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      #chatbot-window {
+        position: fixed;
+        bottom: 80px;
+        right: 30px;
+        width: 320px;
+        height: 420px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 9999;
+      }
+
+      #chatbot-header {
+        background: #0078ff;
+        color: white;
+        padding: 10px;
+        cursor: grab;
+        user-select: none;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      #chatbot-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+      }
+
+      #chatbot-input {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+      }
+
+      #chatbot-input input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+      }
+
+      #chatbot-input button {
+        margin-left: 8px;
+        padding: 8px 12px;
+        border: none;
+        background: #0078ff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #chatbot-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        background: #0078ff;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        cursor: pointer;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chatbot-window" style="display: none">
+      <div id="chatbot-header">💬 Chatbot</div>
+      <div id="chatbot-messages">Hello! How can I help you today?</div>
+      <div id="chatbot-input">
+        <input type="text" placeholder="Type a message..." />
+        <button>Send</button>
+      </div>
+    </div>
+
+    <div id="chatbot-icon">💬</div>
+
+    <script>
+      const chatbot = document.getElementById("chatbot-window");
+      const chatbotHeader = document.getElementById("chatbot-header");
+      const chatbotIcon = document.getElementById("chatbot-icon");
+
+      // Toggle chatbot visibility
+      chatbotIcon.addEventListener("click", () => {
+        chatbot.style.display =
+          chatbot.style.display === "none" ? "flex" : "none";
+      });
+
+      // Make chatbot draggable
+      let offsetX = 0,
+        offsetY = 0,
+        isDragging = false;
+
+      function startDrag(e) {
+        isDragging = true;
+        const rect = chatbot.getBoundingClientRect();
+        offsetX = (e.clientX || e.touches[0].clientX) - rect.left;
+        offsetY = (e.clientY || e.touches[0].clientY) - rect.top;
+        chatbotHeader.style.cursor = "grabbing";
+      }
+
+      function doDrag(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        let x = e.clientX || e.touches[0].clientX;
+        let y = e.clientY || e.touches[0].clientY;
+        chatbot.style.left = x - offsetX + "px";
+        chatbot.style.top = y - offsetY + "px";
+        chatbot.style.bottom = "auto";
+        chatbot.style.right = "auto";
+        chatbot.style.position = "fixed";
+      }
+
+      function stopDrag() {
+        isDragging = false;
+        chatbotHeader.style.cursor = "grab";
+      }
+
+      chatbotHeader.addEventListener("mousedown", startDrag);
+      chatbotHeader.addEventListener("touchstart", startDrag);
+
+      window.addEventListener("mousemove", doDrag);
+      window.addEventListener("touchmove", doDrag);
+
+      window.addEventListener("mouseup", stopDrag);
+      window.addEventListener("touchend", stopDrag);
+    </script>
+  </body>
+</html>
