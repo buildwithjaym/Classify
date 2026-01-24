@@ -213,7 +213,7 @@ if (isset($_POST['login'])) {
   <!-- Glassmorphism Login Card -->
   <div class="login-container" id="loginBox" role="dialog" aria-label="Login form">
     <h1>𝐂𝐋𝐀𝐒𝐒𝐈𝐅𝐘</h1>
-    <h3>Instant Class Cancellation & Notification System</h3>
+    <h3>Your All-in-One Solution for Class Cancellations, Grades, Quizzes, and Schedules</h3>
 
     <form method="POST" novalidate>
       <div class="input-box">
